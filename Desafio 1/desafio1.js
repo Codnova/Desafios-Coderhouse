@@ -7,6 +7,11 @@ class ProductManager {
 
   addProduct(title, description, price, thumbnail, code, stock) {
     
+    if (!title || !description || !price || !thumbnail || !code || !stock) {
+      console.log('Todos los valores son obligatorios');
+      return;
+    }
+
     let id=1
     if (this.products.length>0) {
       id = this.products[this.products.length-1].id + 1 
