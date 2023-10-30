@@ -122,8 +122,12 @@ async function main(){
     res.setHeader('Content-Type', 'application/json') //Seteamos el header
     let productos = await productManager.getProducts()
     let limit = parseInt(req.query.limit) //Obtenemos el query del limite de productos
-    productos = productos.slice(0, limit) //Modificamos el array para limitar los resultados
-    res.send({productos})
+    if(!limit) {
+      res.send({productos})
+    } else {
+      productos = productos.slice(0, limit) //Modificamos el array para limitar los resultados
+      res.send({productos})
+    }
     console.log(productos)
   })
 
