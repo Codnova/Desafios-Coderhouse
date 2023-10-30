@@ -56,17 +56,45 @@ class ProductManager {
     } else {
       console.log(`El producto ${products[index].title} ha sido borrado`)
       products.splice(index, 1)
-      fs.writeFileSync(this.path, JSON.stringify(products)) // Guardamos los cambios en el archivo
+      fs.writeFileSync(this.path, JSON.stringify(products, null, 5)) // Guardamos los cambios en el archivo
+    }
+  }
+
+  updateProduct(id, object) {
+    const allowedProperties = ['title', 'description', 'price', 'thumbnail', 'code', 'stock'] // Propiedades que están habilitadas para su modificación
+    let products = this.getProducts()
+    let index = products.findIndex(product => product.id === id);
+    if (index === -1) {
+      console.log("Producto no encontrado")
+      return
+    } else {
+      for (let key of Object.keys(object)) {
+        if (allowedProperties.includes(key)) {
+            products[index][key] = object[key];
+        }
+    }
+      
+      fs.writeFileSync(this.path, JSON.stringify(products, null, 5)) // Guardamos los cambios en el archivo
     }
   }
   
 }
 
-//productManager.addProduct('PS5', 'console', 499, 'google.com', 1, 50);
+//let productManager = new ProductManager('./data.json')
 
-let productManager = new ProductManager('./data.json')
+
+//productManager.addProduct('Xbox', 'console', 499, 'google.com', 1, 50);
+//productManager.addProduct('PS5', 'console', 499, 'google.com', 2, 50);
+//productManager.addProduct('Mouse', 'hardware', 499, 'google.com', 3, 50);
+//productManager.addProduct('PC', 'hardware', 1000, 'google.com', 4, 50);
+
 console.log("Los productos registrados son:", productManager.getProducts())
-console.log("El producto encontrado por ID es: ", productManager.getProductById(3))
-productManager.removeProduct(1)
+//console.log("El producto encontrado por ID es: ", productManager.getProductById(3))
+
+//productManager.removeProduct(4)
+
+//productManager.updateProduct(4, {title: 'PC nueva', price: 100, id: 9999})
+
+console.log("Los productos luego del update son:", productManager.getProducts())
 
 
