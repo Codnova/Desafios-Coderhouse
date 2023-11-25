@@ -14,7 +14,6 @@ export default class CartManager {
 
   async getCarts() { // Returns a list of all the Carts in the database
     try {
-      console.log('el path del archivo carts es: ', this.path)
       let data = await fs.readFile(this.path, "utf-8");
       return JSON.parse(data);
     } catch (error) {

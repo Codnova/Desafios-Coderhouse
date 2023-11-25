@@ -10,7 +10,7 @@ const productManager = new ProductManager(fileName)
 router.get('/', async (req,res) => {
 
   try {
-
+    
     let data =  await productManager.getProducts();
     res.status(200).render('home' , {data, title: "Home Page"})
 

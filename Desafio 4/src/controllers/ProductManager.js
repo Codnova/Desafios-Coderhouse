@@ -9,7 +9,6 @@ export default class ProductManager {
   async getProducts() { // Retrieves the products in the database
     try {
       let data = await fs.readFile(this.path, "utf-8");
-      console.log('el path del archivo products es: ', this.path)
       return JSON.parse(data);
     } catch (error) {
       if (error.code === "ENOENT") {
