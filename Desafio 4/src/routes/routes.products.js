@@ -4,6 +4,7 @@ import {Router} from 'express';
 import ProductManager from '../controllers/ProductManager.js';
 import __dirname from '../utils.js';
 import {join} from 'path';
+import { socketServer } from '../app.js';
 
 // Definitions
 
@@ -75,8 +76,12 @@ router.post('/', async (req, res)=> {
   } 
   try {
     await productManager.addProduct(product) // Send the product and destructure it in the target function
+    let updatedProducts = await productManager.getProducts();
+    socketServer.emit('newProduct', updatedProducts);
     res.status(200).json({status:'success', message:'Product added successfully'})
   } catch (error) {
     res.status(400).json({status:'error', message: error.message});
   }
 })
+
+//Emitir a todos con 

@@ -16,8 +16,8 @@ const app = express();
 const PORT = 8080;
 const server = app.listen(PORT, ()=> console.log('Escuchando en puerto: ', PORT));
 const fileViews = join(__dirname, "./views");
-const socketServer = new Server (server);
 const publicFolder = join(__dirname, "/public");
+export const socketServer = new Server (server);
 
 //Methods
 
@@ -33,16 +33,7 @@ app.use("/", viewsRouter);
 
 socketServer.on("connection", socket => {
   console.log(`Nuevo cliente conectado con ID: ${socket.id}`)
-  const message = "Mensaje para el cliente desde el servidor"
-  socket.emit("hello", message)
 })
-
-
-/* app.get("/", (req, res) => { //Homepage
-  res.setHeader("Content-Type", "text/plain"); //Seteamos el header
-  res.status(200).send('OK');
-  
-}); */
 
 app.use('/api/products', routerProducts)
 app.use('/api/carts', routerCarts)

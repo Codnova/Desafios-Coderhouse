@@ -1,11 +1,17 @@
+// Imports
+
 import { Router } from "express";
 import ProductManager  from '../controllers/ProductManager.js';
 import { join } from "path"; //Utilizamos el path para poder trabajar con rutas absolutas
 import __dirname from '../utils.js'; //Importamos utils para poder trabvajar con rutas absolutas
-export const router = Router();
 
+// Definitions
+
+export const router = Router();
 let fileName = join(__dirname, "/data/products.json");
 const productManager = new ProductManager(fileName)
+
+// Methods
 
 router.get('/', async (req,res) => {
 
