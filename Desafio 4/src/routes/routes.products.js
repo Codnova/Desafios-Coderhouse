@@ -32,7 +32,7 @@ router.get("/:id", async (req, res) => { // Get a product by its ID
   if (isNaN(id)) {
     return res.status(400).json({error: "The ID you entered is not a valid number"});
   }
-  result = await productManager.getProductById(id);
+  let result = await productManager.getProductById(id);
   if (!result) {
     res.status(400).json({error: "The product couldn't be found"});
   } else {
@@ -46,7 +46,9 @@ router.delete("/:id", async (req, res) => { // Delete a product by its ID
   if (isNaN(id)) {
     return res.status(404).json({error: "The ID you entered is not a valid number"});
   }
-  result = await productManager.removeProduct(id);
+  let result = await productManager.removeProduct(id);
+  let updatedProducts = await productManager.getProducts();
+  socketServer.emit('newProduct', updatedProducts);
   if (!result) {
     res.status(400).json({error: "The product couldn't be found"});
   } else {
@@ -61,7 +63,9 @@ router.put("/:id", async (req, res) => { // Update a product by its ID
   if (isNaN(id)) {
     return res.status(400).json({error: "The ID you entered is not a valid number"});
   }
-  result = await productManager.updateProduct(id, product);
+  let result = await productManager.updateProduct(id, product);
+  let updatedProducts = await productManager.getProducts();
+  socketServer.emit('newProduct', updatedProducts);
   if (!result) {
     res.status(404).json({error: "The product couldn't be found"});
   } else {
