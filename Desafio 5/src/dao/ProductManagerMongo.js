@@ -1,4 +1,4 @@
-import { productsModel } from '../dao/models/products.model.js';
+import {productsModel} from './models/products.model.js';
 
 export default class ProductManagerMongo {
 
@@ -19,7 +19,7 @@ export default class ProductManagerMongo {
         console.log('All values are required');
         throw new Error('All values are required');
       }
-      let products = await this.getProducts();
+      let products = await productsModel.find().lean() // Get all products (even deleted ones) so that the ID can be set properly
       let id = 1;
       if (products.length > 0) {
         id = products[products.length - 1].id + 1;
@@ -39,12 +39,17 @@ export default class ProductManagerMongo {
         console.log(`Product code ${newProduct.title} already exists in the array`);
         throw new Error(`Product code ${newProduct.title} already exists in the array`);
       } else {
-        products.push(newProduct);
-        await productsModel.create(newProduct);
+        let result = await productsModel.create(newProduct); // Saves the product to the DB
+        if (result) {
+          return true
+        } else {
+          console.log('Product not added');
+          return false
+        }
       }
     } catch (error) {
-      console.log("Error adding the product", error);
-      throw new Error("Error adding the product");
+      console.log('Error adding the product', error);
+      throw new Error('Error adding the product');
     }
   }
 
@@ -84,17 +89,15 @@ export default class ProductManagerMongo {
     }
   }
 
-  //TODO Update Product
-
   async updateProduct(id, object) { // Updates a product in the database
     try {
       const allowedProperties = [
-        "title",
-        "description",
-        "price",
-        "thumbnail",
-        "code",
-        "stock",
+        'title',
+        'description',
+        'price',
+        'thumbnail',
+        'code',
+        'stock',
       ]; // Properties that are allowed for modification
       
       let productCodeExists = await productsModel.findOne({code:object.code});
@@ -122,5 +125,4 @@ export default class ProductManagerMongo {
       throw new Error('Product with ID not updated: ', id);
     }
   }
-
 }

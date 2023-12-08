@@ -3,35 +3,32 @@ import mongoose from "mongoose";
 const cartsCollection = 'carts'
 const cartsSchema = new mongoose.Schema(
   {
-    id: Number, 
-    title: {
-      type: String, required: true
+    cartId: {
+      type: Number,
+      unique: true // Ensures that each cart has a unique ID
     },
-    description: {
-      type: String, required: true
-    },
-    price: {
-      type: Number, required: true
-    },
-    thumbnail: {
-      type: Array, required: true
-    },
-    code: {
-      type: Number, required: true, unique: true
-    },
-    stock: {
-      type: Number, required: true
-    },
-    status: {
-      type: Boolean, default: true
+    products: [{
+      productId: {
+        type: Number, 
+        required: true
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      }
+    }],
+    deleted: {
+      type: Boolean, default: false
     }
+    
   },
   {
     timestamps: true
   }
+  
 )
 
-export const productsModel = mongoose.model(productsCollection, productsSchema)
+export const cartsModel = mongoose.model(cartsCollection, cartsSchema)
 
 
 /* [

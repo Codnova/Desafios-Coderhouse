@@ -15,6 +15,7 @@ socket.on('newProduct', (products) => { //When products are added, deleted, or u
                     <td>$${product.price}</td>
                     <td>${product.code}</td>
                     <td>${product.stock}</td>
+                    <td>${product.status}</td>
                   </tr>`;
     tableBody.innerHTML += newRow;
   });

@@ -59,7 +59,8 @@ export default class CartManager {
       }
       
     } catch (error) {
-
+      console.log(error.message);
+      throw new Error("Error checking for products in the cart");
     }
   }
 

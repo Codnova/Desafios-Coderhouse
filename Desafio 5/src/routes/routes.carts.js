@@ -1,14 +1,11 @@
 // Imports
 
 import {Router} from 'express';
-import CartManager from '../dao/CartManager.js';
-import __dirname from '../utils.js';
-import {join} from 'path';
+import CartManager from '../dao/CartManagerMongo.js';
 
 // Definitions
 
-let fileName = join(__dirname, "/dao/carts.json");
-let cartManager = new CartManager(fileName);
+let cartManager = new CartManager();
 export const router = Router();
 
 // Methods
@@ -49,11 +46,12 @@ router.post("/:cid/product/:pid", async (req, res) => { // Adds a product to a c
 });
 
 router.post("/", async (req,res) => { // Creates a new cart with products
-  let products = req.body;
+  let products = req.body; // An array of objects carts
   if (!products) {
     return res.status(400).json({status: 'error', error: "Incomplete data, make sure specify the products to be added to the cart"})
   } else {
-    if (await cartManager.addCart(products)) {
+    let result = await cartManager.addCart(products);
+    if (result) {
       res.status(200).json({status:'success', message: "Cart created successfully"})
     } else{
       return res.status(400).json({status: 'error', error: "The cart couldn't be created, make sure you entered the data correctly"})
