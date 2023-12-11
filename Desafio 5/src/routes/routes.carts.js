@@ -35,6 +35,9 @@ router.post("/:cid/product/:pid", async (req, res) => { // Adds a product to a c
   let cartId  = parseInt(req.params.cid); // This param comes in string format
   let productId = parseInt(req.params.pid);
   let product = req.body; // The object product with its quantity
+  if (productId != product.productId){
+    return res.status(400).json({error: "The product Id in the URL must match the productId in the req.body"});
+  }
   if (isNaN(cartId) || isNaN(productId)) {
     return res.status(400).json({error: "The cart or product ID you entered is not a valid number"});
   }

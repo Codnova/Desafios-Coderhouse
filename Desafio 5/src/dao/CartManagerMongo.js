@@ -89,4 +89,44 @@ export default class CartManagerMongo {
     }
   }
 
+  async addProductToCart(cartId, { productId, quantity }) { // Adds a product to a cart. If the product is already in the cart, increase its quantity
+    try {
+      if (!productId || !quantity || !await productManager.checkProductById(productId)) { // Check if the product ID is invalid or doesn't exist in the list of products
+        console.log(' You entered invalid data, the product ID is incorrect or it does not exists in the product DB');
+        return false;
+      } else {
+        let cartFound = await cartsModel.findOne({cartId, deleted:false}).lean();
+        if (!cartFound) {
+          console.log("Cart not found");
+          return false;
+        }
+        const productsIndex = cartFound.products.findIndex(product => product.productId === productId) // Finds and retrieves the index of the product we are going to update (if it exists)
+        if (productsIndex === -1){
+          console.log('The product does not exists in the cart, so it will be added');
+          const newProduct = {productId: productId, quantity: quantity};
+          let result = await cartsModel.findOneAndUpdate(
+            {cartId},
+            {$push: {products: newProduct}},
+            {new:true}
+          );
+          console.log(result);
+        } else {
+          console.log('The product is in the cart, so its quantity will be updated');
+          let newQuantity = quantity + cartFound.products[productsIndex].quantity
+          let update = { $set: { [`products.${productsIndex}.quantity`]: newQuantity } };
+          let result = await cartsModel.findOneAndUpdate(
+            {cartId},
+            update,
+            {new:true}
+          )
+          console.log(result);
+        }
+        return true;
+      }
+    } catch (error) {
+      console.log(error.message);
+      throw new Error("Error updating the cart");
+    }
+  }
+
 }
