@@ -1,34 +1,35 @@
-<h1>Real Time Products</h1>
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold text-blue-600 mb-4">Real Time Products</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Code</th>
-      <th>Stock</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each data}}
-      <tr>
-        <td>{{this.id}}</td>
-        <td>{{this.title}}</td>
-        <td>{{this.description}}</td>
-        <td>${{this.price}}</td>
-        <td>{{this.code}}</td>
-        <td>{{this.stock}}</td>
-        <td>{{this.status}}</td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+    <table class="min-w-full table-auto">
+      <thead class="bg-blue-500 text-white">
+        <tr>
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Title</th>
+          <th class="px-4 py-2">Description</th>
+          <th class="px-4 py-2">Price</th>
+          <th class="px-4 py-2">Code</th>
+          <th class="px-4 py-2">Stock</th>
+          <th class="px-4 py-2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each data}}
+          <tr class="bg-white border-b">
+            <td class="px-4 py-2">{{this.id}}</td>
+            <td class="px-4 py-2">{{this.title}}</td>
+            <td class="px-4 py-2">{{this.description}}</td>
+            <td class="px-4 py-2">${{this.price}}</td>
+            <td class="px-4 py-2">{{this.code}}</td>
+            <td class="px-4 py-2">{{this.stock}}</td>
+            <td class="px-4 py-2">{{this.status}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
 
-
-<a href="/">Homepage</a>
-
-<script src="../socket.io/socket.io.js"></script>
-<script src="js/index.js"></script>
+    <div class="mt-4">
+      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Homepage</a>
+      <a href="/chatApp" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-2 rounded">Chat App</a>
+    </div>
+  </div>

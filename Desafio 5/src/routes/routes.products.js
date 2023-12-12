@@ -25,8 +25,8 @@ router.get("/", async (req, res) => { // Get the complete list of products
 
 router.get("/:id", async (req, res) => { // Get a product by its ID
   res.setHeader("Content-Type", "application/json"); // Set the header
-  let id = parseInt(req.params.id); // This param comes in string format
-  if (isNaN(id)) {
+  let id = req.params.id; // Must be Product ID from MongoDB
+  if (!id) {
     return res.status(400).json({error: "The ID you entered is not a valid number"});
   }
   let result = await productManager.getProductById(id);
@@ -39,8 +39,8 @@ router.get("/:id", async (req, res) => { // Get a product by its ID
 
 router.delete("/:id", async (req, res) => { // Delete a product by its ID
   res.setHeader("Content-Type", "application/json"); // Set the header
-  let id = parseInt(req.params.id); // This param comes in string format
-  if (isNaN(id)) {
+  let id = req.params.id; // Must be Product ID from MongoDB
+  if (!id) {
     return res.status(404).json({error: "The ID you entered is not a valid number"});
   }
   let result = await productManager.deleteProduct(id);
@@ -56,8 +56,8 @@ router.delete("/:id", async (req, res) => { // Delete a product by its ID
 router.put("/:id", async (req, res) => { // Update a product by its ID
   res.setHeader("Content-Type", "application/json"); // Set the header
   let product = req.body // Get the information to be updated
-  let id = parseInt(req.params.id); // This param comes in string format
-  if (isNaN(id)) {
+  let id = req.params.id; // Must be Product ID from MongoDB
+  if (!id) {
     return res.status(400).json({error: "The ID you entered is not a valid number"});
   }
   let result = await productManager.updateProduct(id, product);

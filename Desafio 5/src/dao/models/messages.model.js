@@ -3,23 +3,12 @@ import mongoose from "mongoose";
 const messagesCollection = 'messages'
 const messagesSchema = new mongoose.Schema(
   {
-    messageId: {
-      type: Number,
-      unique: true // Ensures that each cart has a unique ID
+    email: {
+      type: String,
     },
-    sender: {
+    message: {
       type: String
-    },
-    recipient: {
-      type: String
-    },
-    content: {
-      type: String
-    },
-    deleted: {
-      type: Boolean, default: false
     }
-    
   },
   {
     timestamps: true
@@ -27,4 +16,4 @@ const messagesSchema = new mongoose.Schema(
   
 )
 
-export const cartsModel = mongoose.model(cartsCollection, cartsSchema)
+export const messagesModel = mongoose.model(messagesCollection, messagesSchema)

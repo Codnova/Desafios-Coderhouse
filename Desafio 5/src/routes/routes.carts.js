@@ -18,10 +18,7 @@ router.get("/", async (req, res) => { // Get the complete list of carts
 
 router.get("/:cid", async (req, res) => { // Get a cart by its ID
   res.setHeader("Content-Type", "application/json"); // Set the header
-  let id = parseInt(req.params.cid); // This param comes in string format
-  if (isNaN(id)) {
-    return res.status(400).json({error: "The ID you entered is not a valid number"});
-  }
+  let id = req.params.cid; // The cartId MUST be the _id from MongoDB
   let result = await cartManager.getCartById(id);
   if (!result) {
     res.status(400).json({error: "The cart couldn't be found"});
@@ -32,16 +29,17 @@ router.get("/:cid", async (req, res) => { // Get a cart by its ID
 
 router.post("/:cid/product/:pid", async (req, res) => { // Adds a product to a cart by its ID
   res.setHeader("Content-Type", "application/json"); // Set the header
-  let cartId  = parseInt(req.params.cid); // This param comes in string format
-  let productId = parseInt(req.params.pid);
+  let cartId  = req.params.cid; // The cartId MUST be the _id from MongoDB
+  let productId = req.params.pid; //Product Id MUST be the _id from mongoDB
   let product = req.body; // The object product with its quantity
   if (productId != product.productId){
     return res.status(400).json({error: "The product Id in the URL must match the productId in the req.body"});
   }
-  if (isNaN(cartId) || isNaN(productId)) {
+  if (!cartId ||!productId) {
     return res.status(400).json({error: "The cart or product ID you entered is not a valid number"});
   }
-  if (await cartManager.addProductToCart(cartId, product)){
+  let result = await cartManager.addProductToCart(cartId, product)
+  if (result){
     res.status(200).json({status:'success', message: "Cart created successfully"})
   } else {
     return res.status(400).json({status: 'error', error: "The cart couldn't be updated, make sure you entered the data correctly"})
@@ -59,7 +57,21 @@ router.post("/", async (req,res) => { // Creates a new cart with products
     } else{
       return res.status(400).json({status: 'error', error: "The cart couldn't be created, make sure you entered the data correctly"})
     }
-    
   }
 })
 
+router.delete("/:cid", async (req, res) => { 
+  res.setHeader("Content-Type", "application/json"); 
+  let cartId = req.params.cid; // Extract the cartId from the request parameters
+  if (!cartId) { // The cartID Must be the MongoDB id
+    return res.status(400).json({error: "Please provide a valid cart ID"});
+  }
+  let result = await cartManager.deleteCart(cartId);
+  if (result) {
+    // Successfully deleted the cart
+    res.status(200).json({status: 'success', message: "Cart deleted successfully"});
+  } else {
+    // Failed to delete the cart (either not found or some other error)
+    res.status(400).json({error: "The cart couldn't be found or deleted"});
+  }
+});

@@ -29,9 +29,19 @@ router.get('/', async (req,res) => {
 router.get('/realtimeproducts', async (req,res) => {
 
   try {  
-
-    let data = await productManager.getProducts();
+    let data = await productManager.getProducts(); // Retrieves the products from the DB
     res.status(200).render('realTimeProducts' , {data})
+
+  } catch (error) {
+        res.setHeader('Content-Type','application/json');
+        return res.status(400).json({error:`error`});
+  }
+})
+
+router.get('/chatapp', async (req,res) => {
+
+  try {  
+    res.status(200).render('chat') // Renders the chat app
 
   } catch (error) {
         res.setHeader('Content-Type','application/json');

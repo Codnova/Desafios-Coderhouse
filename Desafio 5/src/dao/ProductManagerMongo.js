@@ -4,7 +4,7 @@ export default class ProductManagerMongo {
 
   async getProducts() { // Retrieves the products in the database
     try {
-      return await productsModel.find({deleted:false}).lean();
+      return await productsModel.find({}).lean();
     } catch (error) {
       if (error) {
         console.log(error); // There aren't any products or there was an error
@@ -19,7 +19,7 @@ export default class ProductManagerMongo {
         console.log('All values are required');
         throw new Error('All values are required');
       }
-      let products = await productsModel.find().lean() // Get all products (even deleted ones) so that the ID can be set properly
+      let products = await productsModel.find() // Get all products (even deleted ones) so that the ID can be set properly
       let id = 1;
       if (products.length > 0) {
         id = products[products.length - 1].id + 1;
@@ -55,7 +55,8 @@ export default class ProductManagerMongo {
 
   async deleteProduct(id) {
     try {
-      return await productsModel.updateOne( {deleted:false, id:id}, {$set: {deleted: true}})
+      return await productsModel.deleteOne({_id:id})
+      //( {deleted:false, _id:id}, {$set: {deleted: true}}) // Logically deletes the product
     } catch (error) {
       console.log(error)
     }
@@ -63,7 +64,7 @@ export default class ProductManagerMongo {
 
   async getProductById(id) { // Checks if a product exists and returns the product
     try {
-      let product = await productsModel.findOne({id:id}).lean();
+      let product = await productsModel.findOne({_id:id}).lean();
       if (!product) {
         console.log('Product with ID not found: ', id);
       }
@@ -76,7 +77,7 @@ export default class ProductManagerMongo {
 
   async checkProductById(id){ // Checks if a productId exists and returns true or false
     try {
-      let product = await productsModel.findOne({id:id}).lean();
+      let product = await productsModel.findOne({_id:id}).lean();
       if (!product) {
         console.log('Product with ID not found: ', id);
         return false
@@ -99,7 +100,6 @@ export default class ProductManagerMongo {
         'code',
         'stock',
       ]; // Properties that are allowed for modification
-      
       let productCodeExists = await productsModel.findOne({code:object.code});
       if(productCodeExists){
         console.log(`The Product code of ${object.title} already exists in the array`);
@@ -111,7 +111,7 @@ export default class ProductManagerMongo {
             updateObject[key] = object[key];
           }
         }
-        let updatedProducts = await productsModel.findOneAndUpdate({id:id}, updateObject, {new:true});
+        let updatedProducts = await productsModel.findOneAndUpdate({_id:id}, updateObject, {new:true});
         if (!updatedProducts) {
           console.log('The product could not be updated')
           return false

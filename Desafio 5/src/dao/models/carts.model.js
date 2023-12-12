@@ -9,7 +9,8 @@ const cartsSchema = new mongoose.Schema(
     },
     products: [{
       productId: {
-        type: Number, 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'products',
         required: true
       },
       quantity: {
@@ -20,7 +21,6 @@ const cartsSchema = new mongoose.Schema(
     deleted: {
       type: Boolean, default: false
     }
-    
   },
   {
     timestamps: true
@@ -29,30 +29,3 @@ const cartsSchema = new mongoose.Schema(
 )
 
 export const cartsModel = mongoose.model(cartsCollection, cartsSchema)
-
-
-/* [
-  {
-    "id": 1,
-    "products": [
-      { "product": 1, "quantity": 4 },
-      { "product": 2, "quantity": 2 }
-    ]
-  },
-  {
-    "id": 2,
-    "products": [
-      { "product": 3, "quantity": 1 },
-      { "product": 4, "quantity": 1 },
-      { "product": 1, "quantity": 1 }
-    ]
-  },
-  {
-    "id": 3,
-    "products": [
-      { "product": 5, "quantity": 1 },
-      { "product": 6, "quantity": 1 }
-    ]
-  },
-  { "id": 4, "products": [{ "product": 7, "quantity": 4 }] }
-] */
