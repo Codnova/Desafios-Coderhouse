@@ -24,14 +24,12 @@ function auth (req, res, next) { // Middleware to check if a user is authenticat
 
 router.post('/login', async (req,res) => {
   let {email, password} = req.body; // Load the name and password from the form body
-  console.log('Data coming from Login Form', email, password)
   if(!email || !password) {
     return res.redirect('/login?error=Complete all the required fields');
   }
   password = crypto.createHmac('sha256', 'CoderCoder').update(password).digest('hex'); // Hash password
   try {
     let findUser = await usersModel.findOne({email, password});
-    console.log(findUser)
     if (!findUser) { // User not found
       return res.redirect(`/login?error=User and password credentials not found`)
     } 
@@ -52,13 +50,11 @@ router.post('/login', async (req,res) => {
 
 router.post('/signup', async (req,res) => {
   let {name, age, email, password, role='user'} = req.body; // Load the name and password from the URL query
-  console.log('Body arriving at signup: ', name, age, email, password); 
   if(!email || !password || !age || !name) {
     return res.redirect('/signup?error=Complete all the required fields');
   } else {
     try {
       let findUser = await usersModel.findOne({email});
-      console.log(findUser) 
       if (findUser) {
         return res.redirect(`/signup?error=Email ${email} already exists`)
       } 

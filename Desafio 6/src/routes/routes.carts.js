@@ -50,7 +50,7 @@ router.post("/:cid/product/:pid", async (req, res) => { // Adds a product to a c
   }
 }); //TODO Decrease stock of the product
 
-router.post("/", async (req,res) => { // Creates a new cart with products
+router.post("/", async (req,res) => { // Creates a new cart with products, the products are sent via Body
   let products = req.body; // An array of product objects to be added to the cart
   if (!products) {
     return res.status(400).json({status: 'error', error: "Incomplete data, make sure specify the products to be added to the cart"})
