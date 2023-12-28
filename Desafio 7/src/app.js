@@ -65,7 +65,7 @@ app.use('/api/sessions', sessionsRouter)
 
 async function connectDB() { // Connects to MongoDB
   try {
-    await mongoose.connect('mongodb+srv://codiox:CoderCoder@ecommerce.76nmmgq.mongodb.net/?retryWrites=true&w=majority', {dbName:'ecommerce'})
+    await mongoose.connect('mongodb+srv://codiox:INSERTECLAVE@ecommerce.76nmmgq.mongodb.net/?retryWrites=true&w=majority', {dbName:'ecommerce'})
     console.log('DB Online');
   } catch (error) {
     console.log(error)
