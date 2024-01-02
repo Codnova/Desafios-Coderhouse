@@ -13,6 +13,8 @@ import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import __dirname from './utils.js'; 
 import mongoose from 'mongoose';
+import { initializePassport } from './config/config.passport.js';
+import passport from 'passport';
 
 
 // Definitions
@@ -48,6 +50,10 @@ app.use(sessions({
   resave: true,
   saveUninitialized: true
 })) */
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session())
 
 app.engine('handlebars', engine({
   runtimeOptions: {
