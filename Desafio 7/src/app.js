@@ -16,7 +16,6 @@ import mongoose from 'mongoose';
 import { initializePassport } from './config/config.passport.js';
 import passport from 'passport';
 
-
 // Definitions
 
 const PORT = 3000; 
@@ -27,7 +26,6 @@ const server = app.listen(PORT, ()=> console.log('Server online on Port: ', PORT
 export const io = new Server (server);
 
 // Methods
-
 
 app.use(sessions({
   store: MongoStore.create({
@@ -41,20 +39,11 @@ app.use(sessions({
   saveUninitialized: false
 }))
 
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-/* app.use(cookieParser());
-app.use(sessions({
-  secret: 'codercoder',
-  resave: true,
-  saveUninitialized: true
-})) */
-
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session())
-
 app.engine('handlebars', engine({
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,

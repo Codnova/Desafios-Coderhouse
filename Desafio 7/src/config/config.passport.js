@@ -1,5 +1,6 @@
 import passport from 'passport';
-import local from 'passport-local'
+import local from 'passport-local';
+import github from 'passport-github2';
 import { usersModel } from '../dao/models/users.model.js';
 import { createHash, validatePassword } from '../utils.js';
 
@@ -70,6 +71,36 @@ export function initializePassport() {
         return done(error, false);
         //return res.redirect('/login?error=Unexpected error in login')
       }
+    }
+  ))
+
+  passport.use ('github', new github.Strategy(
+    {
+      clientID: 'Iv1.185facca79f0b420',
+      clientSecret: 'INSERTELLAVE',
+      callbackURL: 'http://localhost:3000/api/sessions/callbackGithub'
+    },
+    async(accessToken, refreshToken, profile, done)=>{
+      try {
+
+        let user = await usersModel.findOne({email:profile._json.email}); // See if the user is already registered, if not, create a new one with the data we pull from github
+        if (!user) {
+          let newUser = {
+            name: profile._json.name,
+            email: profile._json.email,
+            age: 18,
+            role: 'user',
+            profile: profile
+          }
+          user = await usersModel.create(newUser)
+        }
+
+        return done(null, user)
+        
+      } catch (error) {
+        return done(error)
+      }
+
     }
   ))
 

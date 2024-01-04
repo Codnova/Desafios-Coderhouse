@@ -5,7 +5,6 @@ import { usersModel } from '../dao/models/users.model.js';
 import { createHash, validatePassword } from '../utils.js';
 import passport from 'passport';
 
-
 // Definitions
 
 export const router = Router()
@@ -21,6 +20,17 @@ function auth (req, res, next) { // Middleware to check if a user is authenticat
 }
 
 // Methods
+
+router.get('/github', passport.authenticate('github', {}) ,async (req, res) => {
+
+});
+
+router.get('/callbackGithub', passport.authenticate('github', {failureRedirect:'/api/sessions/loginError'}) ,async (req, res) => {
+  req.session.user = req.user;
+  console.log('Req Session on callbackGithub: ', req.session.user);
+  return res.redirect('/products')
+
+});
 
 router.get('/loginError', (req, res) => {
   return res.redirect('/login?error=Unexpected error in login')
@@ -39,8 +49,6 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/api/ses
 router.get('/signupError', (req, res) => {
   return res.redirect('/signup?error=Error during signup');
 });
-
-
 
 router.post('/signup', passport.authenticate('signup', {failureRedirect: '/api/sessions/signupError'}), async (req,res) => {
   let {email} = req.body;

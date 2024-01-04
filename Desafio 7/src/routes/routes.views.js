@@ -15,7 +15,6 @@ const cartManager = new CartManagerMongo();
 // Middlewares
 
 function auth (req, res, next) { // Middleware to check if a user is authenticated
-  console.log('Req Session on ROUTER VIEWS', req.session.user)
   if (!req.session.user){
     return res.redirect('/login')
     
@@ -61,7 +60,7 @@ router.get('/products', auth, async (req,res) => { // Products View
     console.log(`Queries received in view router LIMIT: ${limit}, PAGE: ${page}, QUERY: ${query}, SORT: ${sort}`);
     let products = await productManager.getProducts(limit, page, query, sortOption); // Fetches the paginate data of all products
     let {totalPages, hasNextPage, hasPrevPage, prevPage, nextPage} = products
-    console.log('Pagination values from DB: ', totalPages, hasNextPage, hasPrevPage, prevPage, nextPage); 
+    //console.log('Pagination values from DB: ', totalPages, hasNextPage, hasPrevPage, prevPage, nextPage); 
     res.status(200).render('products' , {
       data: products.docs,
       totalPages, hasNextPage, hasPrevPage, prevPage, nextPage, limit, page, sort, query,

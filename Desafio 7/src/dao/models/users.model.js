@@ -12,6 +12,7 @@ const usersSchema = new mongoose.Schema(
   },
 
   {
+    strict: false,
     timestamps: {
       updatedAt: 'lastModified', createdAt: 'signupDate'
     }
