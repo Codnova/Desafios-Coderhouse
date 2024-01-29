@@ -1,2 +1,3 @@
 node_modules
 consultas.db
+.env

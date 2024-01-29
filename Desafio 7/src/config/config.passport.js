@@ -77,7 +77,7 @@ export function initializePassport() {
   passport.use ('github', new github.Strategy(
     {
       clientID: 'Iv1.185facca79f0b420',
-      clientSecret: 'INSERTELLAVE',
+      clientSecret: '1acbd9f379f509be65ef6b7da3cb4495c3987796',
       callbackURL: 'http://localhost:3000/api/sessions/callbackGithub'
     },
     async(accessToken, refreshToken, profile, done)=>{

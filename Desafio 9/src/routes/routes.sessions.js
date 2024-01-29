@@ -1,8 +1,6 @@
 // Imports
 
 import { Router } from 'express';
-import { usersModel } from '../dao/models/users.model.js';
-import { createHash, validatePassword } from '../utils.js';
 import passport from 'passport';
 
 // Definitions
@@ -42,7 +40,7 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/api/ses
     email: req.user.email,
     role: req.user.role
   } 
-  return res.redirect('/products')
+  return res.redirect('/products');
   
 })
 
@@ -55,11 +53,11 @@ router.post('/signup', passport.authenticate('signup', {failureRedirect: '/api/s
   return res.redirect(`/login?message=Account ${email} created`);
 })
 
-router.get('/data', auth, async (req, res) => {
+router.get('/current', auth, async (req, res) => { // This route sends the client the data of the current logged in user
   res.setHeader('Content-Type', 'application/json');
   try {
     res.status(200).json({
-      message: 'Success'
+      payload: req.session.user
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

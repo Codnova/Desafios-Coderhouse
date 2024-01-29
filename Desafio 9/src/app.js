@@ -14,11 +14,12 @@ import MongoStore from 'connect-mongo';
 import __dirname from './utils.js'; 
 import mongoose from 'mongoose';
 import { initializePassport } from './config/config.passport.js';
+import { config } from './config/config.js';
 import passport from 'passport';
 
 // Definitions
 
-const PORT = 3000; 
+const PORT = config.PORT; 
 const viewFolder = join(__dirname, '/views');
 const publicFolder = join(__dirname, '/public');
 const app = express();
